@@ -111,6 +111,7 @@
     background: linear-gradient(135deg, var(--accent) 0%, transparent 60%);
     opacity: 0;
     transition: opacity .2s;
+    pointer-events: none;
   }
   .mode-card:hover { border-color: var(--accent); transform: translateY(-2px); }
   .mode-card:hover::before { opacity: .06; }
@@ -140,6 +141,51 @@
     color: var(--text2);
     line-height: 1.5;
   }
+
+  /* ── 랜덤 문제 수 선택 ── */
+  .random-count-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .count-btn {
+    flex: 1;
+    min-width: 56px;
+    padding: 7px 0;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text2);
+    cursor: pointer;
+    transition: border-color .15s, background .15s, color .15s;
+    font-family: 'Noto Sans KR', sans-serif;
+    text-align: center;
+  }
+  .count-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .count-btn.active {
+    border-color: var(--gold);
+    background: #2a2200;
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .random-start-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px 0;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: var(--gold);
+    color: #1a1400;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: opacity .15s, transform .1s;
+  }
+  .random-start-btn:hover { opacity: .88; transform: translateY(-1px); }
 
   .week-section { margin-top: 2rem; }
   .week-section h2 {
@@ -192,15 +238,16 @@
   }
   .back-btn {
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--correct);
     border-radius: var(--radius-sm);
     padding: 6px 14px;
     font-size: 13px;
-    color: var(--text2);
+    font-weight: 600;
+    color: var(--correct);
     cursor: pointer;
-    transition: border-color .2s, color .2s;
+    transition: border-color .2s, color .2s, background .2s;
   }
-  .back-btn:hover { border-color: var(--accent); color: var(--text); }
+  .back-btn:hover { background: var(--correct-bg); color: #fff; border-color: #3de0a0; }
 
   .quiz-meta {
     flex: 1;
@@ -443,6 +490,135 @@
     color: #f08080;
   }
 
+  /* ── 오답노트 NAV BADGE ── */
+  .note-nav-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 6px 14px;
+    font-size: 13px;
+    color: var(--text2);
+    cursor: pointer;
+    transition: border-color .2s, color .2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+  }
+  .note-nav-btn:hover { border-color: var(--wrong); color: var(--wrong); }
+  .note-badge {
+    background: var(--wrong);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 20px;
+    padding: 1px 6px;
+    min-width: 18px;
+    text-align: center;
+    display: none;
+  }
+  .note-badge.show { display: inline-block; }
+
+  /* ── 오답노트 SCREEN ── */
+  .note-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+  .note-header h2 {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    flex: 1;
+  }
+  .note-empty {
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--text2);
+    font-size: 15px;
+  }
+  .note-empty span { display: block; font-size: 36px; margin-bottom: 12px; }
+
+  .note-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.2rem 1.2rem 1rem;
+    margin-bottom: 10px;
+    position: relative;
+    transition: border-color .2s, opacity .25s;
+  }
+  .note-card:hover { border-color: #3e3e52; }
+  .note-card.removing { opacity: 0; transform: translateX(20px); transition: opacity .25s, transform .25s; }
+
+  .note-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .note-q {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+    font-family: 'Noto Serif KR', serif;
+    flex: 1;
+  }
+  .note-del-btn {
+    background: none;
+    border: none;
+    color: var(--text2);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    line-height: 1;
+    transition: color .15s, background .15s;
+  }
+  .note-del-btn:hover { color: var(--wrong); background: var(--wrong-bg); }
+
+  .note-divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 10px;
+  }
+  .note-ans-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .note-ans-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: var(--correct-bg);
+    color: var(--correct);
+    border: 1px solid #1a5e3f;
+    flex-shrink: 0;
+  }
+  .note-exp {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.65;
+  }
+  .note-cite {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 11.5px;
+    color: var(--accent2);
+    background: #1e1a3a;
+    border: 1px solid #3a3060;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-family: monospace;
+    letter-spacing: .3px;
+  }
+
   /* scrollbar */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
@@ -454,6 +630,10 @@
 <header class="site-header">
   <div class="logo">소멸시효 OX</div>
   <div class="sub">민법 강의 25–28강</div>
+  <button class="note-nav-btn" onclick="showScreen('note')">
+    📋 오답노트
+    <span class="note-badge" id="note-badge">0</span>
+  </button>
 </header>
 
 <!-- ════════════════════════════════════════
@@ -472,10 +652,17 @@
         <h3>전체 문제 풀기</h3>
         <p>25강~28강 모든 문제를 순서대로 풀어봅니다. 총 123문제</p>
       </div>
-      <div class="mode-card" onclick="startQuiz('random')">
+      <div class="mode-card" id="random-card">
         <div class="badge gold">랜덤</div>
-        <h3>랜덤 30문제</h3>
-        <p>전체 문제에서 무작위 30개를 뽑아 실력을 테스트합니다.</p>
+        <h3>랜덤 문제 풀기</h3>
+        <p>전체 문제에서 무작위로 뽑아 순서도 섞어 출제합니다.</p>
+        <div class="random-count-row">
+          <button class="count-btn" onclick="setRandomCount(10, this)">10문제</button>
+          <button class="count-btn active" onclick="setRandomCount(30, this)">30문제</button>
+          <button class="count-btn" onclick="setRandomCount(50, this)">50문제</button>
+          <button class="count-btn" onclick="setRandomCount(123, this)">전문제</button>
+        </div>
+        <button class="random-start-btn" onclick="startQuiz('random')">시작하기 →</button>
       </div>
     </div>
 
@@ -539,10 +726,8 @@
   <div class="container">
     <div class="result-card">
       <div class="result-title" id="result-quiz-title">결과</div>
-      <div class="result-stars" id="result-stars"></div>
       <div class="score-display" id="result-score"></div>
       <div class="score-total" id="result-total"></div>
-      <div class="score-msg" id="result-msg"></div>
       <div class="stat-row">
         <div class="stat-item">
           <span class="stat-num c" id="stat-correct">0</span>
@@ -560,6 +745,7 @@
       <div class="result-btns">
         <button class="btn-primary" onclick="retryQuiz()">↺ 다시 풀기</button>
         <button class="btn-secondary" onclick="goHome()">홈으로</button>
+        <button class="btn-secondary" id="add-to-note-btn" onclick="addWrongToNote()" style="border-color:var(--wrong);color:var(--wrong);display:none;">📋 오답노트에 추가</button>
       </div>
     </div>
 
@@ -567,6 +753,20 @@
       <h3>틀린 문제 모아보기</h3>
       <div id="review-list"></div>
     </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     오답노트 SCREEN
+════════════════════════════════════════ -->
+<div id="screen-note" class="screen">
+  <div class="container">
+    <div class="note-header">
+      <button class="back-btn" onclick="showScreen('home')">← 홈</button>
+      <h2>오답노트</h2>
+      <span id="note-count-label" style="font-size:13px;color:var(--text2);"></span>
+    </div>
+    <div id="note-list"></div>
   </div>
 </div>
 
@@ -742,11 +942,20 @@ function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + id).classList.add('active');
   window.scrollTo(0, 0);
+  if (id === 'note') renderNoteScreen();
 }
 
 // ════════════════════════════════════════
 // QUIZ LOGIC
 // ════════════════════════════════════════
+let randomCount = 30; // 기본값
+
+function setRandomCount(n, el) {
+  randomCount = n;
+  document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
 function startQuiz(mode) {
   currentMode = mode;
   answeredCount = 0;
@@ -755,11 +964,14 @@ function startQuiz(mode) {
 
   let pool = BANK[mode] || BANK.all;
   if (mode === 'random') {
-    pool = shuffle([...BANK.all]).slice(0, 30);
+    const shuffled = shuffle([...BANK.all]);
+    pool = randomCount >= 123 ? shuffled : shuffled.slice(0, randomCount);
   }
   currentQuestions = pool;
 
-  document.getElementById('quiz-title').textContent = TITLES[mode] || '퀴즈';
+  document.getElementById('quiz-title').textContent = mode === 'random'
+    ? `랜덤 ${randomCount >= 123 ? '전문제' : randomCount + '문제'}`
+    : (TITLES[mode] || '퀴즈');
   document.getElementById('quiz-sub').textContent = `총 ${currentQuestions.length}문제`;
   updateProgress();
 
@@ -805,7 +1017,7 @@ function answer(i, val) {
     if (val === true) { oBtn.classList.add('sel-correct-o'); }
     else { xBtn.classList.add('sel-correct-x'); }
   } else {
-    wrongItems.push({ num: i + 1, q: q.q, correctAns: q.ans ? 'O' : 'X' });
+    wrongItems.push({ num: i + 1, q: q.q, correctAns: q.ans ? 'O' : 'X', exp: q.exp });
     document.getElementById('qcard-' + i).classList.add('state-wrong');
     if (val === true) { oBtn.classList.add('sel-wrong-o'); }
     else { xBtn.classList.add('sel-wrong-x'); }
@@ -838,19 +1050,15 @@ function showResult() {
   const total = currentQuestions.length;
   const rate = Math.round(correctCount / total * 100);
 
-  document.getElementById('result-quiz-title').textContent = TITLES[currentMode] || '퀴즈';
+  const quizTitle = currentMode === 'random'
+    ? `랜덤 ${randomCount >= 123 ? '전문제' : randomCount + '문제'}`
+    : (TITLES[currentMode] || '퀴즈');
+  document.getElementById('result-quiz-title').textContent = quizTitle;
   document.getElementById('result-score').textContent = correctCount;
   document.getElementById('result-total').textContent = `/ ${total} 문제`;
   document.getElementById('stat-correct').textContent = correctCount;
   document.getElementById('stat-wrong').textContent = total - correctCount;
   document.getElementById('stat-rate').textContent = rate + '%';
-
-  const stars = rate >= 90 ? '★★★★★' : rate >= 70 ? '★★★★☆' : rate >= 50 ? '★★★☆☆' : rate >= 30 ? '★★☆☆☆' : '★☆☆☆☆';
-  const msgs = ['많이 어려웠죠? 해설을 꼼꼼히 복습해봐요.', '조금 더 다져봐요!', '잘 하셨어요! 핵심 논리를 잡아가고 있어요.', '거의 완벽해요!', '만점! 소멸시효 마스터입니다! 🎉'];
-  const msgIdx = rate >= 90 ? 4 : rate >= 70 ? 3 : rate >= 50 ? 2 : rate >= 30 ? 1 : 0;
-
-  document.getElementById('result-stars').textContent = stars;
-  document.getElementById('result-msg').textContent = msgs[msgIdx];
 
   const reviewList = document.getElementById('review-list');
   const reviewSection = document.getElementById('review-section');
@@ -858,6 +1066,10 @@ function showResult() {
 
   if (wrongItems.length > 0) {
     reviewSection.style.display = 'block';
+    const addBtn = document.getElementById('add-to-note-btn');
+    addBtn.style.display = 'inline-flex';
+    addBtn.textContent = '📋 오답노트에 추가';
+    addBtn.disabled = false;
     wrongItems.forEach(item => {
       const div = document.createElement('div');
       div.className = 'review-item';
@@ -866,6 +1078,7 @@ function showResult() {
     });
   } else {
     reviewSection.style.display = 'none';
+    document.getElementById('add-to-note-btn').style.display = 'none';
   }
 
   showScreen('result');
@@ -877,6 +1090,90 @@ function retryQuiz() {
 
 function goHome() {
   showScreen('home');
+}
+
+// ════════════════════════════════════════
+// 오답노트 (세션 내 메모리 저장)
+// ════════════════════════════════════════
+let noteItems = []; // { id, q, ans, exp }
+
+function addWrongToNote() {
+  // 이번 세션 오답 중 아직 노트에 없는 것만 추가
+  let added = 0;
+  wrongItems.forEach(item => {
+    const already = noteItems.find(n => n.q === item.q);
+    if (!already) {
+      noteItems.push({ id: Date.now() + Math.random(), q: item.q, ans: item.correctAns, exp: item.exp });
+      added++;
+    }
+  });
+  updateNoteBadge();
+  if (added > 0) {
+    const btn = document.getElementById('add-to-note-btn');
+    btn.textContent = `✓ ${added}개 추가됨`;
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = '📋 오답노트에 추가';
+      btn.disabled = false;
+    }, 2000);
+  }
+}
+
+function updateNoteBadge() {
+  const badge = document.getElementById('note-badge');
+  const count = noteItems.length;
+  badge.textContent = count;
+  badge.classList.toggle('show', count > 0);
+}
+
+function renderNoteScreen() {
+  const list = document.getElementById('note-list');
+  const label = document.getElementById('note-count-label');
+  list.innerHTML = '';
+  label.textContent = noteItems.length > 0 ? `총 ${noteItems.length}개` : '';
+
+  if (noteItems.length === 0) {
+    list.innerHTML = `<div class="note-empty"><span>📋</span>아직 오답노트가 비어 있어요.<br>퀴즈를 풀고 오답을 추가해보세요!</div>`;
+    return;
+  }
+
+  noteItems.forEach(item => {
+    // 판례번호 추출: 괄호 안 숫자+다 패턴
+    const citeMatches = item.exp.match(/\(([^)]+)\)/g) || [];
+    const citeHTML = citeMatches.map(c => `<span class="note-cite">${c}</span>`).join(' ');
+
+    // 해설에서 판례번호 괄호 제거한 순수 해설
+    const pureExp = item.exp.replace(/\s*\([^)]+\)/g, '').trim();
+
+    const card = document.createElement('div');
+    card.className = 'note-card';
+    card.id = 'note-' + item.id;
+    card.innerHTML = `
+      <div class="note-card-top">
+        <div class="note-q">${item.q}</div>
+        <button class="note-del-btn" onclick="removeNoteItem('${item.id}')" title="삭제">✕</button>
+      </div>
+      <div class="note-divider"></div>
+      <div class="note-ans-row">
+        <span class="note-ans-badge">정답 ${item.ans}</span>
+      </div>
+      <div class="note-exp">${pureExp}</div>
+      ${citeHTML ? `<div style="margin-top:8px;">${citeHTML}</div>` : ''}
+    `;
+    list.appendChild(card);
+  });
+}
+
+function removeNoteItem(id) {
+  const card = document.getElementById('note-' + id);
+  if (card) {
+    card.classList.add('removing');
+    setTimeout(() => {
+      noteItems = noteItems.filter(n => String(n.id) !== String(id));
+      updateNoteBadge();
+      renderNoteScreen();
+    }, 250);
+  }
 }
 
 // ════════════════════════════════════════
